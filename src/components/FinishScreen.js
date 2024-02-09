@@ -19,10 +19,15 @@ function FinishScreen() {
         {emoji} You scored <strong>{points}</strong> out of {maxPoints}{" "}
         {Math.ceil(percentage)}%
       </p>
+
       <p className="highscore">
-        {isNewHighscore ? "⭐ New" : ""} Highscore: {curUser.userHighscore}{" "}
-        points
+        {curUser
+          ? `${isNewHighscore ? "⭐ New" : ""} Highscore: ${
+              curUser.userHighscore
+            } points`
+          : `There is no users. Please add a user to view highscores`}
       </p>
+
       <button
         className="btn btn-ui"
         onClick={() => dispatch({ type: "restart" })}

@@ -23,7 +23,7 @@ function UserHighscore() {
 
           <select
             className="user-select"
-            value={curUser.userName}
+            value={curUser?.userName}
             onChange={selectUser}
           >
             {users.map((user) => (
@@ -32,7 +32,7 @@ function UserHighscore() {
               </option>
             ))}
           </select>
-          <p>Highscore: {curUser.userHighscore}</p>
+          <p>Highscore: {curUser?.userHighscore}</p>
         </div>
       )}
 
