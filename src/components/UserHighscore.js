@@ -1,15 +1,8 @@
+import { useUsers } from "../context/UsersContext";
 import Form from "./Form";
 
-function UserHighscore({ dispatch, users, isOpen, newUser, curUser, error }) {
-  /// removes the user from the json server after removing a user from the ui
-  async function removeUserFromData(id) {
-    await fetch(`http://localhost:8000/users/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json/id",
-      },
-    });
-  }
+function UserHighscore() {
+  const { isOpen, users, curUser, removeUser, selectUser } = useUsers();
 
   return (
     <div className={`user-highscore-container ${isOpen ? "open" : ""}`}>
@@ -22,9 +15,7 @@ function UserHighscore({ dispatch, users, isOpen, newUser, curUser, error }) {
           <button
             className="btn-remove-user"
             onClick={() => {
-              dispatch({ type: "removeUser", payload: curUser.id });
-
-              removeUserFromData(curUser.id);
+              removeUser(curUser.id);
             }}
           >
             ❌
@@ -32,15 +23,8 @@ function UserHighscore({ dispatch, users, isOpen, newUser, curUser, error }) {
 
           <select
             className="user-select"
-            value={curUser?.userName}
-            onChange={(e) =>
-              dispatch({
-                type: "selectUser",
-                payload: users.filter(
-                  (user) => user.userName === e.target.value
-                )[0],
-              })
-            }
+            value={curUser.userName}
+            onChange={selectUser}
           >
             {users.map((user) => (
               <option value={user.userName} key={user.id}>
@@ -48,17 +32,11 @@ function UserHighscore({ dispatch, users, isOpen, newUser, curUser, error }) {
               </option>
             ))}
           </select>
-          <p>Highscore: {curUser?.userHighscore}</p>
+          <p>Highscore: {curUser.userHighscore}</p>
         </div>
       )}
 
-      <Form
-        dispatch={dispatch}
-        newUser={newUser}
-        error={error}
-        users={users}
-        isOpen={isOpen}
-      />
+      <Form />
     </div>
   );
 }
