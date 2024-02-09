@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { useQuiz } from "../context/QuizContext";
+import { useUsers } from "../context/UsersContext";
 
 function Timer() {
-  const { dispatch, secondsRemaining } = useQuiz();
+  const { dispatch, secondsRemaining, points } = useQuiz();
+  const { updateUserHighscore } = useUsers();
 
   const mins = Math.floor(secondsRemaining / 60);
   const seconds = secondsRemaining % 60;
@@ -10,13 +12,14 @@ function Timer() {
     function () {
       const id = setInterval(function () {
         dispatch({ type: "tick" });
+        secondsRemaining === 1 && updateUserHighscore(points);
       }, 1000);
 
       return function () {
         clearInterval(id);
       };
     },
-    [dispatch]
+    [dispatch, updateUserHighscore, points, secondsRemaining]
   );
 
   return (

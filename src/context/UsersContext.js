@@ -4,7 +4,7 @@ const UsersContext = createContext();
 
 const initialState = {
   users: [],
-  curUser: "",
+  curUser: null,
   newUser: "",
   isOpen: true,
   userExists: false,
@@ -58,7 +58,7 @@ function reducer(state, action) {
         return {
           ...state,
           users: [],
-          curUser: "",
+          curUser: null,
           isOpen: true,
         };
       return {
@@ -124,6 +124,10 @@ function UsersProvider({ children }) {
     dispatch({ type: "newUserName", payload: e.target.value });
   }
 
+  function setInputOnStart() {
+    dispatch({ type: "start" });
+  }
+
   // adds a new user to the data.json file and the state. this function is called in the form add button
   async function addUser(user) {
     try {
@@ -162,7 +166,7 @@ function UsersProvider({ children }) {
 
   //updates the curUser highscore in the data.json file and the state, this function is called in the NextButton finish button
   async function updateUserHighscore(points) {
-    if (points < curUser.userHighscore)
+    if (points <= curUser?.userHighscore || curUser === null)
       return dispatch({ type: "notNewHighscore" });
     try {
       const res = await fetch(`http://localhost:8000/users/${curUser.id}`, {
@@ -209,6 +213,7 @@ function UsersProvider({ children }) {
         selectUser,
         openInput,
         setUserName,
+        setInputOnStart,
         usersStatus,
       }}
     >
